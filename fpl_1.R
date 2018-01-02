@@ -12,5 +12,7 @@ unavail_players <- player_details[player_details$status == "u",]
 unavail_logic <- player_details$status == "u"
 unavail_index <- which(unavail_logic)
 player_details <- player_details[-unavail_index,]
-#This is my first commit
-a <-2
+# Extract All GKs
+goalkeepers <- player_details[player_details$element_type == 1]
+p <- ggplot(data = goalkeepers, aes(x = points_per_game, y = web_name))
+
