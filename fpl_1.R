@@ -12,3 +12,5 @@ unavail_players <- player_details[player_details$status == "u",]
 unavail_logic <- player_details$status == "u"
 unavail_index <- which(unavail_logic)
 player_details <- player_details[-unavail_index,]
+#This is my first commit
+a <-2
