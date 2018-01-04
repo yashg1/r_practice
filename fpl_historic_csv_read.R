@@ -3,11 +3,19 @@ rm(list = setdiff(ls(), lsf.str())) #Clear All
 
 filepath_1 <-  paste(getwd(),"/FPL_16/", sep ="")
 fileappend <- "FPL16-GW"
-fileiter <- 37
+#fileiter <- 37
 fileext <- ".csv"
-file_vec <- c(filepath_1,fileappend,fileiter,fileext)
-myfilename <- paste(file_vec,collapse = "")
-players <- read.csv(myfilename, header= TRUE )
+file_vec_1 <- c(filepath_1,fileappend,05,fileext)
+file_vec_2 <- c(filepath_1,fileappend,06,fileext)
+file_vec_3 <- c(filepath_1,fileappend,37,fileext)
+
+myfilename_1 <- paste(file_vec_1,collapse = "")
+myfilename_2 <- paste(file_vec_2,collapse = "")
+myfilename_3 <- paste(file_vec_3,collapse = "")
+
+players_1 <- read.csv(myfilename_1, header= TRUE )
+players_2 <- read.csv(myfilename_2, header= TRUE)
+
 source("display_name.R")
 web_name <- display_name(players)
 # Open Multiple CSV files
