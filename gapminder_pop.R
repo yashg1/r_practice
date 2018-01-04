@@ -1,4 +1,5 @@
 library("ggplot2")
+library("plyr")
 rm(list = setdiff(ls(), lsf.str())) #Clear All
 gapminder <- read.csv("https://raw.githubusercontent.com/swcarpentry/r-novice-gapminder/gh-pages/_episodes_rmd/data/gapminder-FiveYearData.csv",header = TRUE)
 #str(gapminder)
@@ -21,21 +22,16 @@ gapminder <- read.csv("https://raw.githubusercontent.com/swcarpentry/r-novice-ga
 # }
 # }
 #Plot
-ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp)) +
-  geom_point(aes(color=continent),shape = 18) + scale_x_log10() +
-  geom_smooth(method="lm", size=1.5) 
-# Function
-# Takes a dataset and multiplies the population column
-# with the GDP per capita column.
-calcGDP <- function(dat, year=NULL, country=NULL) {
-  if(!is.null(year)) {
-    dat <- dat[dat$year %in% year, ]
-  }
-  if (!is.null(country)) {
-    dat <- dat[dat$country %in% country,]
-  }
-  gdp <- dat$pop * dat$gdpPercap
-  
-  new <- cbind(dat, gdp=gdp)
-  return(new)
-}
+# ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp)) +
+#   geom_point(aes(color=continent),shape = 18) + scale_x_log10() +
+#   geom_smooth(method="lm", size=1.5) 
+# Call Function
+source("calcGDP.R")
+withGDP <- calcGDP(gapminder)
+#Data Manipulation
+new <- ddply(
+  .data = gapminder,
+  .variables = c("continent","year"),
+  .fun = function(a) mean(a$lifeExp)
+)
+p2 <- ggplot(data = new[new$continent %in% "Asia",], aes(x = year, y = V1)) + geom_point()
