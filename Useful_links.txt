@@ -1,0 +1,3 @@
+https://www3.nd.edu/~steve/computing_with_data/
+http://stat545.com/faq.html
+http://www.reed.edu/data-at-reed/resources/R/
