@@ -13,8 +13,7 @@ display_name <- function(p){
   temp <- str_replace_all(dis_name,fixed(" "), "")
   temp <- str_replace_all(temp,"[[:punct:]]", "")
   dis_name <- str_to_lower(temp)
-  p <- cbind(dis_name,p)
-  new <- list("dis_name" = dis_name,"new_list" = p)
+  new <- cbind(dis_name,p)
   return(new)
 }
   
