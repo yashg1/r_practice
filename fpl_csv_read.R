@@ -7,7 +7,8 @@ require("purrr")
 require("tidyr")
 require("dplyr")
 require("stringr")
-setwd("~/R_tutorials/r_practice")
+setwd("D:/Grad School/Coursework/Extra/R/Tutorials/r_practice")
+#setwd("../R_tutorials/r_practice")
 source("display_name.R")
 
 ## Set WD to locate csv files
@@ -36,11 +37,27 @@ game_week <- lapply(dat, display_name)
 #a <- game_week$GW05 %>% select(dis_name,PositionsList,Team,Cost,TotalPoints)
 #b <- game_week$GW05 %>% group_by(Team) %>% summarise(mean_pts = mean(TotalPoints))
 
-player_name <- str_to_lower("fabianski") # Do Not Enter a single character
+player_name <- str_to_lower("giroud") # Do Not Enter a single character
 
-player_points_allGW <- map(game_week,~filter(.x,grepl(player_name,dis_name)))%>% 
-                       map(~select(.x, TotalPoints)) 
-player_points_allGW_vec <- unlist(player_points_allGW)
-ppw <- player_points_allGW_vec[2:length(player_points_allGW_vec)] - player_points_allGW_vec[1:(length(player_points_allGW_vec)-1)]
-ppw <- c(player_points_allGW_vec[1],ppw)
-plot(ppw)
+player_extract_data <- map(game_week,~filter(.x,grepl(player_name,dis_name)))%>% 
+                       map(~select(.x,PointsLastRound,TotalPoints, EAIndex, Form,NextFixture1 )) 
+
+points_per_gw<- as.data.frame(map(player_extract_data,~select(.x,PointsLastRound)))
+
+last_gw <- player_extract_data$GW37$TotalPoints - (player_extract_data$GW37$PointsLastRound) - 
+  player_extract_data$GW36$TotalPoints
+
+points_per_gw <- as.data.frame(c(points_per_gw,last_gw))
+#names(points_per_gw) <- paste("GW",as.character(4:37),sep = "")
+names(points_per_gw) <- as.character(4:37)
+
+
+stack(points_per_gw) %>% ggplot(aes(x = ind, y = values)) + geom_point()
+
+
+
+# Old Points per Game Week
+# player_points_allGW_vec <- unlist(player_points_allGW)
+# ppw <- player_points_allGW_vec[2:length(player_points_allGW_vec)] - player_points_allGW_vec[1:(length(player_points_allGW_vec)-1)]
+# ppw <- c(player_points_allGW_vec[1]/5,ppw) #Data available since GW5. Hence GW5 data divided by 5
+# plot(ppw)
