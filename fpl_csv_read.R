@@ -37,10 +37,13 @@ game_week <- lapply(dat, display_name)
 #a <- game_week$GW05 %>% select(dis_name,PositionsList,Team,Cost,TotalPoints)
 #b <- game_week$GW05 %>% group_by(Team) %>% summarise(mean_pts = mean(TotalPoints))
 
-player_name <- str_to_lower("giroud") # Do Not Enter a single character
+player_name <- str_to_lower(c("giroud","ozil")) # Do Not Enter a single character
 
+# player_extract_data <- map(game_week,~filter(.x,grepl(player_name,dis_name)))%>% 
+#                        map(~select(.x,PointsLastRound,TotalPoints, EAIndex, Form,NextFixture1 )) 
 player_extract_data <- map(game_week,~filter(.x,grepl(player_name,dis_name)))%>% 
-                       map(~select(.x,PointsLastRound,TotalPoints, EAIndex, Form,NextFixture1 )) 
+  map(~select(.x,PointsLastRound,TotalPoints, EAIndex, Form,NextFixture1 )) 
+
 
 points_per_gw<- as.data.frame(map(player_extract_data,~select(.x,PointsLastRound)))
 
