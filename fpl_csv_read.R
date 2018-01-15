@@ -1,4 +1,5 @@
 #Read CSV files using PURRR / LAPPLY
+cat("\014")  #Clear Screen
 rm(list = setdiff(ls(), lsf.str())) #Clear All
 #Packages
 #require("tidyverse")
@@ -25,40 +26,53 @@ names(dat) <- f2
 
 # Combine Display Names
 game_week <- lapply(dat, display_name)
-# Extract Points from Game_Week list
-#lapply applies a function to each data frame in the list sequentially
-# game_week$GW05[game_week$GW05$Surname %in% "Cech","TotalPoints"]
-#points_data <- lapply(game_week,function(x) x[x$Surname %in% "Xhaka","TotalPoints"])
-# points_df <- data.frame(unlist(points_data))
-# p <- ggplot(points_df, aes(names(points_data),points_df[[1]]))
-# p + geom_bar(stat = "identity")
-
-# Dataframe Manipulation 2
-#a <- lapply(game_week,select(dis_name,PositionsList,Team,Cost,TotalPoints))
-#a <- game_week$GW05 %>% select(dis_name,PositionsList,Team,Cost,TotalPoints)
-#b <- game_week$GW05 %>% group_by(Team) %>% summarise(mean_pts = mean(TotalPoints))
-
+#Select Player Name to extract points per GW data
 player_name <- sort(str_to_lower(c("degea","Hennessey"))) # Do Not Enter a single character
-## Add code to preserve order - critical!
 pattern <- paste(player_name, collapse = "|")
 n_players <- length(player_name)
-# player_extract_data <- map(game_week,~filter(.x,grepl(player_name,dis_name)))%>% 
-#                        map(~select(.x,PointsLastRound,TotalPoints, EAIndex, Form,NextFixture1 )) 
+## Extract Player ppgw data
 player_extract_data <- map(game_week,~filter(.x,grepl(pattern,dis_name)))%>% 
   map(~select(.x, PointsLastRound, TotalPoints, Cost, SelectedByPercent, EAIndex, Form,NextFixture1 )) 
+#Extract data from Player Positions
+player_extract_data_positions <- map(game_week,~group_by(.x,PositionsList)) %>% 
+  map(~summarise(.x,mean_pts = mean(PointsLastRound[MinutesPlayed!=0]), 
+                 mean_selected_by = mean(SelectedByPercent) ,
+                 num_pos_players = n()))
+# Extract Team data
+team_extract_data <- map(game_week,~group_by(.x,Team)) %>%
+map(~summarise(.x,meanteampts = mean(PointsLastRound[MinutesPlayed!=0]),
+               totalteampts = sum(PointsLastRound),
+               meanform = mean(Form[MinutesPlayed!=0]),
+               meancost = mean(Cost),
+               nettransfers = sum(TransfersInRound) - sum(TransfersOutRound),
+               maxselectedby = max(SelectedByPercent),
+               pointsperdollar = sum(TotalPointsPerDollar[MinutesPlayed!=0]), 
+               bonus = sum(Bonus),
+               numteamplayers = n()))
+#lapply(d, function(x) p<- ggplot(x, aes(x = mean_form, y = mean_cost, color = Team))+geom_jitter() )
+# Select variables from team data
+var_select = c("pointsperdollar","bonus")
+team_var_select <- map(team_extract_data, ~select(.x,var_select))
+team_var_select_df <- as.data.frame(team_var_select)  
+teamlist <- team_extract_data$GW05$Team
+team_var_select_df <- as.data.frame(cbind(teamlist,team_var_select_df))
+names(team_var_select_df) <- gsub(".", "_", names(team_var_select_df), fixed = TRUE)
+gather_df_long <- team_var_select_df %>% gather(obstype_gw,obs_value,-teamlist)
+# gather_df_normal <- gather_df_long %>% spread(obstype_gw,obs_value)
+# gather_temp <- gather_df_long %>% unite(var_ID, team_list,obstype_gw,sep="_")
+gather_temp <- gather_df_long %>% separate(obstype_gw, into = c('GW','obs_type'),sep = '_')
+gather_spread <- spread(gather_temp,obs_type,obs_value)
+gather_spread$GW <- as.numeric(str_extract(gather_spread$GW,"[0-9]+"))
 
-c <- map(game_week,~group_by(.x,PositionsList)) %>% 
-  map(~summarise(.x,mean_pts = mean(PointsLastRound), num_team_players = n()))
+myplot <- gather_spread %>% subset(teamlist == "ARS"| teamlist == "TOT"|teamlist == "CHE"|teamlist == "MCI") %>%
+  ggplot(aes(x = pointsperdollar, y = bonus,color = teamlist))
+myplot + geom_point(size = 2.5,alpha = 0.7)+geom_line(size = 1)
 
-d <- map(game_week,~group_by(.x,Team)) %>%
-map(~summarise(.x,mean_team_pts = mean(PointsLastRound), num_team_players = n()))
-                     
-                                          
 # ------------------------- Extract Points vs. Game Week
-a <- player_ppgw(player_extract_data)
-g <- a %>% ggplot(aes(x = gw, y = pts, color = player_name)) 
-g+ geom_jitter() + geom_line(size =1.2)
+# a <- player_ppgw(player_extract_data)
+# g <- a %>% ggplot(aes(x = gw, y = pts, color = player_name)) 
+# g+ geom_point(color="magenta",size=4,shape=8) + geom_line(size =1.2)
 #-----------------------------
 # # End Restore WD
-# setwd("D:/Grad School/Coursework/Extra/R/Tutorials/r_practice")
+setwd("D:/Grad School/Coursework/Extra/R/Tutorials/r_practice")
 
