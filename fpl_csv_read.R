@@ -66,7 +66,7 @@ gather_spread$GW <- as.numeric(str_extract(gather_spread$GW,"[0-9]+"))
 
 myplot <- gather_spread %>% subset(teamlist == "ARS"| teamlist == "TOT"|teamlist == "CHE"|teamlist == "MCI") %>%
   ggplot(aes(x = pointsperdollar, y = bonus,color = teamlist))
-myplot + geom_point(size = 2.5,alpha = 0.7)+geom_line(size = 1)
+myplot + geom_point(size = 2.5,alpha = 0.7)+geom_line(size = 1)+scale_x_log10()
 
 # ------------------------- Extract Points vs. Game Week
 # a <- player_ppgw(player_extract_data)
