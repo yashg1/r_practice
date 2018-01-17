@@ -9,3 +9,4 @@ https://www.tidytextmining.com/
 http://opensourceforu.com/2017/02/text-mining-with-r/
 https://www.datacamp.com/community/blog/text-mining-in-r-and-python-tips
 http://varianceexplained.org/r/trump-tweets/
+https://rstudio-pubs-static.s3.amazonaws.com/265713_cbef910aee7642dc8b62996e38d2825d.html
