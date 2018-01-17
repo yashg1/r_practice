@@ -40,13 +40,11 @@ setup_twitter_oauth(cust_key, cust_secret, access_token, access_secret)
 # ## save token to home directory
 # saveRDS(twitter_token, file = file_name)
 ##-----
-search_string <- "MLKDay MLKJrDay" #SPACE between different words
+search_string <- "arsenal afc" #SPACE between different words
 num_tweets <- 10e3
 term_sep = "+"
 string_combi_gen <- search_string_gen(search_string,term_sep)
-tweets <- searchTwitter(string_combi_gen, n=num_tweets,
-                        lang="en",
-                        retryOnRateLimit = 1e3)
+tweets <- searchTwitter(string_combi_gen, n=num_tweets,lang="en", retryOnRateLimit = 1e3)
 tw_df <- twListToDF(tweets)
 tw_text <- tw_df$text
 tw_time <- as.POSIXct(tw_df$created, tz = "UTC")
@@ -54,7 +52,7 @@ tw_time <- as.POSIXct(tw_df$created, tz = "UTC")
 ### ----
 myplot_1 <- tw_df  %>% 
   ggplot(aes(created))
-myplot_1 + geom_histogram(aes(fill = ..count..), binwidth = 60*60,
+myplot_1 + geom_histogram(aes(fill = ..count..), binwidth = 30,
   col = "black", alpha = 0.2)+
   scale_fill_gradient("Count", low="blue", high="red")
 ### ----
