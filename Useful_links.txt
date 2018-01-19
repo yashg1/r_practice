@@ -2,7 +2,8 @@ https://www3.nd.edu/~steve/computing_with_data/
 http://stat545.com/faq.html
 http://www.reed.edu/data-at-reed/resources/R/
 http://www.b-eye-network.com/view/index.php?cid=2468
-
+https://stats.idre.ucla.edu/r/seminars/ggplot2_intro/
+http://www.dataschool.io/15-hours-of-expert-machine-learning-videos/ 
 ###--- Text Mining
 https://arpitsolanki14.wordpress.com/2017/10/21/step-by-step-analysis-of-twitter-data-using-r/
 https://www.tidytextmining.com/
@@ -11,3 +12,5 @@ https://www.datacamp.com/community/blog/text-mining-in-r-and-python-tips
 http://varianceexplained.org/r/trump-tweets/
 https://rstudio-pubs-static.s3.amazonaws.com/265713_cbef910aee7642dc8b62996e38d2825d.html
 https://www.r-bloggers.com/using-the-tuber-package-to-analyse-a-youtube-channel/
+#### ---- Data Sets
+http://scg.sdsu.edu/sample-data/
