@@ -14,3 +14,6 @@ https://rstudio-pubs-static.s3.amazonaws.com/265713_cbef910aee7642dc8b62996e38d2
 https://www.r-bloggers.com/using-the-tuber-package-to-analyse-a-youtube-channel/
 #### ---- Data Sets
 http://scg.sdsu.edu/sample-data/
+##Machine Learning
+http://www.cs.bham.ac.uk/~pxt/NC/
+http://slazebni.cs.illinois.edu/fall17/
